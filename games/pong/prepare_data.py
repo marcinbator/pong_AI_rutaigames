@@ -12,7 +12,7 @@ def read_ball():
     with open("pong_pong.csv", 'r') as file:
         reader = csv.reader(file)
         for row in reader:
-            json_str = row[-2].strip('"')
+            json_str = row[-3].strip('"')
             try:
                 json_list = json.loads(json_str)
                 balls_x.append(round(json_list['x'], 1))
@@ -24,7 +24,7 @@ def read_ball():
     return balls_x, balls_y, balls_vel_x, balls_vel_y
 
 
-data = np.loadtxt("pong_pong.csv", delimiter=',', dtype=str, usecols=(1, 11))
+data = np.loadtxt("pong_pong.csv", delimiter=',', dtype=str, usecols=(2, 12))
 
 balls_x, balls_y, balls_vel_x, balls_vel_y = read_ball()
 data = np.column_stack((balls_x, balls_y, balls_vel_x, balls_vel_y, data))

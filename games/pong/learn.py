@@ -17,8 +17,9 @@ with open("min_max_values.txt", "w") as file:
         min_val = column_data.min()
         max_val = column_data.max()
         file.write(f"{min_val}, {max_val}\n")
-        normalized_column_data = (column_data - min_val) / (max_val - min_val)
+        normalized_column_data = (2 * (column_data - min_val) / (max_val - min_val)) - 1
         input_data_normalized.append(normalized_column_data.tolist())
+
 
 input_data_normalized = np.array(input_data_normalized).T
 
@@ -29,17 +30,17 @@ y_test = y_test + 1
 
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
-    keras.layers.Dense(16, activation='relu', ),
-    keras.layers.Dense(8, activation='relu'),
-    keras.layers.Dense(6, activation='relu'),
+    keras.layers.Dense(16, activation='tanh'),
+    keras.layers.Dense(8, activation='tanh'),
+    keras.layers.Dense(6, activation='tanh'),
     keras.layers.Dense(3, activation='softmax'),
 ])
 
-model.compile(optimizer=Adam(learning_rate=0.005),
+model.compile(optimizer=Adam(learning_rate=0.01),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-history = model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=500, batch_size=32, validation_split=0.2)
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
 print('\nTest accuracy:', test_acc)

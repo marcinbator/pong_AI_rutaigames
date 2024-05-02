@@ -6,7 +6,6 @@ from games.pong.model import predict_result
 
 class PongWebSocketHandler(RUTAIGamesWebsocketHandler):
     def send_data(self, receivedData):
-        print(receivedData)
         data = [
             receivedData[1][0]['value']['x'],
             receivedData[1][0]['value']['y'],
@@ -14,7 +13,7 @@ class PongWebSocketHandler(RUTAIGamesWebsocketHandler):
             receivedData[1][0]['value']['velocityY'],
             receivedData[1][2]['value'],
         ]
-        print("data", data)
+        print(data)
         move = predict_result(data)
-        print("move",move)
+        print("move: ", move)
         self.write_message(json.dumps({'up': int(move)}))
