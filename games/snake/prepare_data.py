@@ -3,19 +3,21 @@ import json
 
 import numpy as np
 
-
 import numpy as np
 
-def generate_board(snake_data, apple_data_y, apple_data_x):
+
+def generate_board(snake_data, apple_data_y, apple_data_x, head_y, head_x):
     board = [0] * 20 * 20
 
     for segment in snake_data:
         x, y = segment['positionX'], segment['positionY']
-        board[y * 20 + x] = 2
+        board[y * 20 + x] = -1
 
-    board[apple_data_y * 20 + apple_data_x] = 1
+    board[apple_data_y * 20 + apple_data_x] = 2
+    board[head_y * 20 + head_x] = 1
 
     return board
+
 
 def read_tail(filename):
     tails = []
@@ -29,6 +31,7 @@ def read_tail(filename):
             except json.JSONDecodeError:
                 print("Nie udało się odczytać ostatniej kolumny jako JSON.")
     return tails
+
 
 def map_labels_to_numbers(data):
     labels_column_6 = data[:, 6]
@@ -46,7 +49,7 @@ def prepare_data(filename):
     tails = read_tail(filename)
     boards = []
     for i in range(len(tails)):
-        boards.append(generate_board(tails[i], int(data[i][2]), int(data[i][1])))
+        boards.append(generate_board(tails[i], int(data[i][2]), int(data[i][1]), int(data[i][4]), int(data[i][3])))
     boards_array = np.array(boards)
     data = np.column_stack((data, boards_array))
     data, label_map = map_labels_to_numbers(data)
