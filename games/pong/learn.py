@@ -39,8 +39,11 @@ model = keras.Sequential([
 model.compile(optimizer=Adam(learning_rate=0.0005),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-
 history = model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_split=0.2)
+
+model.save('pong_model.keras')
+
+
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
 print('\nTest accuracy:', test_acc)
@@ -62,4 +65,28 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Validation'], loc='upper left')
 plt.show()
 
-model.save('pong_model.keras')
+# Obliczanie dokładności klasyfikacji dla danych trenujących
+train_predictions = model.predict_step(X_train)
+train_accuracy = np.mean(train_predictions == y_train)
+
+# Obliczanie dokładności klasyfikacji dla danych walidacyjnych
+val_predictions = model.predict_step(X_test)
+val_accuracy = np.mean(val_predictions == y_test)
+
+print('Train accuracy:', train_accuracy)
+print('Validation accuracy:', val_accuracy)
+
+# Rysowanie wykresu dokładności klasyfikacji
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.plot(np.arange(len(history.history['val_accuracy'])), [train_accuracy]*len(history.history['val_accuracy']), linestyle='--')
+plt.plot(np.arange(len(history.history['val_accuracy'])), [val_accuracy]*len(history.history['val_accuracy']), linestyle='--')
+plt.title('Model classification accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation', 'Train Accuracy', 'Validation Accuracy'], loc='upper left')
+plt.show()
+
+
+
+
