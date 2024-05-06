@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from keras.src.optimizers import Adam
@@ -18,8 +17,10 @@ def train_model(layer_config, learning_rate, data_normalization):
     if data_normalization == 'min_max':
         input_data_normalized = (input_data - input_data.min(axis=0)) / (
                 input_data.max(axis=0) - input_data.min(axis=0))
+        activation = 'tanh'
     elif data_normalization == 'zero_one':
         input_data_normalized = (input_data - input_data.mean(axis=0)) / input_data.std(axis=0)
+        activation = 'relu'
 
     # Split data into train and test sets
     X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2,
@@ -33,7 +34,7 @@ def train_model(layer_config, learning_rate, data_normalization):
 
     # Add dense layers according to layer_config
     for units in layer_config:
-        model.add(keras.layers.Dense(units, activation='relu'))
+        model.add(keras.layers.Dense(units, activation=activation))
 
     model.add(keras.layers.Dense(3, activation='softmax'))
 
@@ -72,12 +73,14 @@ for layer_config in layer_configs:
     for learning_rate in learning_rates:
         for normalization_method in normalization_methods:
             acc, loss, classification_accuracy = train_model(layer_config, learning_rate, normalization_method)
-            results.append(f'("{layer_config}, {learning_rate}, {normalization_method}",{acc}, {loss}, {classification_accuracy})')
+            results.append(
+                f'"{";".join(str(x) for x in layer_config)}", {learning_rate}, {normalization_method},{acc}, {loss}, {classification_accuracy}')
             progress_bar.update(1)
 
 progress_bar.close()
 
 # Save results
-with open("results.txt", "w") as file:
+with open("results.csv", "w") as file:
+    file.write("architecture,lr,normalization,accuracy,loss,classification_accuracy\n")
     for a in range(len(results)):
         file.write(f'{results[a]}\n')
