@@ -3,7 +3,7 @@ import json
 
 import numpy as np
 
-name = "pong_pong.csv"
+name = "pong_pong_ai.csv"
 def read_ball():
     balls_x = []
     balls_y = []

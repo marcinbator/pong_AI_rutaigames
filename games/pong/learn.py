@@ -41,15 +41,13 @@ model = keras.Sequential([
 model.compile(optimizer=Adam(learning_rate=0.0005),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-history = model.fit(X_train, y_train, epochs=200, batch_size=32, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_split=0.2)
 
 model.save('pong_model.keras')
 
 ########
-# Predykcja dla danych testowych
 predictions = model.predict(X_test)
 
-# Wykres z odpowiedziami sieci dla danych testowych
 plt.figure(figsize=(10, 8))
 for i in range(3):
     plt.subplot(3, 1, i+1)
