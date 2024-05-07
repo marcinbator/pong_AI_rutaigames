@@ -3,13 +3,13 @@ import json
 
 import numpy as np
 
-
+name = "pong_pong.csv"
 def read_ball():
     balls_x = []
     balls_y = []
     balls_vel_x = []
     balls_vel_y = []
-    with open("pong_pong.csv", 'r') as file:
+    with open(name, 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             json_str = row[-3].strip('"')
@@ -24,9 +24,9 @@ def read_ball():
     return balls_x, balls_y, balls_vel_x, balls_vel_y
 
 
-data = np.loadtxt("pong_pong.csv", delimiter=',', dtype=str, usecols=(2, 12))
+data = np.loadtxt(name, delimiter=',', dtype=str, usecols=(2, 12))
 
 balls_x, balls_y, balls_vel_x, balls_vel_y = read_ball()
 data = np.column_stack((balls_x, balls_y, balls_vel_x, balls_vel_y, data))
 
-np.savetxt('prepared_' + 'pong_pong.csv', data, delimiter=',', fmt='%s')
+np.savetxt('prepared_pong_pong.csv', data, delimiter=',', fmt='%s')

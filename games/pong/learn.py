@@ -1,11 +1,13 @@
+import csv
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from keras.src.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
-
-data = pd.read_csv('prepared_pong_pong.csv', delimiter=',')
+name = "prepared_pong_pong.csv"
+data = pd.read_csv(name, delimiter=',')
 
 input_data = data.iloc[:, :-1].values
 output_data = data.iloc[:, 5].values
@@ -43,7 +45,30 @@ history = model.fit(X_train, y_train, epochs=200, batch_size=32, validation_spli
 
 model.save('pong_model.keras')
 
+########
+# Predykcja dla danych testowych
+predictions = model.predict(X_test)
 
+# Wykres z odpowiedziami sieci dla danych testowych
+plt.figure(figsize=(10, 8))
+for i in range(3):
+    plt.subplot(3, 1, i+1)
+    plt.plot(y_test, label='True')
+    plt.plot(predictions[:, i], label=f'Neuron {i+1}')
+    plt.title(f'Predictions for Neuron {i+1}')
+    plt.xlabel('Index')
+    plt.ylabel('Output')
+    plt.legend()
+plt.tight_layout()
+plt.show()
+
+with open('predictions.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['True_Value', 'Predicted_Neuron_1', 'Predicted_Neuron_2', 'Predicted_Neuron_3'])
+    for true_val, pred_vals in zip(y_test, predictions):
+        writer.writerow([true_val] + list(pred_vals))
+
+########
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
 print('\nTest accuracy:', test_acc)
@@ -66,12 +91,13 @@ plt.legend(['Train', 'Validation'], loc='upper left')
 plt.show()
 
 # Obliczanie dokładności klasyfikacji dla danych trenujących
-train_predictions = model.predict_step(X_train)
+train_predictions = np.argmax(model.predict(X_train), axis=1)
 train_accuracy = np.mean(train_predictions == y_train)
 
 # Obliczanie dokładności klasyfikacji dla danych walidacyjnych
-val_predictions = model.predict_step(X_test)
+val_predictions = np.argmax(model.predict(X_test), axis=1)
 val_accuracy = np.mean(val_predictions == y_test)
+
 
 print('Train accuracy:', train_accuracy)
 print('Validation accuracy:', val_accuracy)
@@ -91,7 +117,7 @@ plt.show()
 ###showing stats
 
 # Wczytanie danych z pliku CSV
-df_normalized = pd.read_csv("prepared_pong_pong.csv", header=None)
+df_normalized = pd.read_csv(name, header=None)
 df_normalized.columns = ["x", "y", "vel_x", "vel_y", "posY", "move"]
 
 # Normalizacja danych
@@ -144,6 +170,3 @@ for column in df_zero_one.columns:
     plt.xlabel("Znormalizowane wartości")
     plt.ylabel("Liczba wystąpień")
     plt.show()
-
-
-

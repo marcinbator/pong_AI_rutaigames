@@ -1,11 +1,11 @@
 from keras.src.saving.saving_lib import load_model
 from sklearn.preprocessing import MinMaxScaler
 
-saved_model = load_model('games/pong/pong_model.keras')
 
 import numpy as np
 
-
+name = "pong_model.keras"
+saved_model = load_model('games/pong/'+name)
 def predict_result(input_values):
     input_values = np.array(input_values)
     normalized_values = []
