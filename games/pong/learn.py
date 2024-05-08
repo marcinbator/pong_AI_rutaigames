@@ -30,18 +30,21 @@ X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, outpu
 y_train = y_train + 1
 y_test = y_test + 1
 
+
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
+    keras.layers.Dense(12, activation='tanh'),
     keras.layers.Dense(10, activation='tanh'),
     keras.layers.Dense(8, activation='tanh'),
     keras.layers.Dense(6, activation='tanh'),
     keras.layers.Dense(3, activation='softmax'),
 ])
 
-model.compile(optimizer=Adam(learning_rate=0.0005),
+model.compile(optimizer=Adam(learning_rate=0.001),  # Zmniejszamy learning rate
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
-history = model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_split=0.2)
+
+history = model.fit(X_train, y_train, epochs=500, batch_size=128, validation_split=0.2)
 
 model.save('pong_model.keras')
 

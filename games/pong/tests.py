@@ -22,8 +22,8 @@ def train_model(layer_config, learning_rate, data_normalization):
 
     X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2,
                                                         random_state=42)
-    y_train = y_train + 1
-    y_test = y_test + 1
+    y_train = (y_train + 1)/2
+    y_test = (y_test + 1)/2
 
     model = keras.Sequential()
     model.add(keras.layers.Flatten(input_shape=(5,)))
@@ -48,7 +48,7 @@ def train_model(layer_config, learning_rate, data_normalization):
     return test_acc, test_loss, classification_accuracy
 
 
-layer_configs = [(8, 8, 3), (12, 8, 3), (16, 8, 3), (10, 8, 6, 3), (12, 8, 6, 3), (16, 8, 6, 3)]
+layer_configs = [(8, 8, 2), (12, 8, 2), (16, 8, 2), (10, 8, 6, 2), (12, 8, 6, 2), (16, 8, 6, 2)]
 learning_rates = [1e-2, 5e-3, 2e-3, 1e-3, 5e-4, 2e-4, 1e-4]
 normalization_methods = ['min_max', 'zero_one']
 
@@ -67,7 +67,7 @@ for layer_config in layer_configs:
 
 progress_bar.close()
 
-with open("results_normal.csv", "w") as file:
+with open("results_ai.csv", "w") as file:
     file.write("architecture,lr,normalization,accuracy,loss,classification_accuracy\n")
     for a in range(len(results)):
         file.write(f'{results[a]}\n')
