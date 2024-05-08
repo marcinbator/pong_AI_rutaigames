@@ -27,8 +27,8 @@ input_data_normalized = np.array(input_data_normalized).T
 
 
 X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2, random_state=42)
-y_train = y_train + 1
-y_test = y_test + 1
+y_train = (y_train + 1)/2
+y_test = (y_test + 1)/2
 
 
 model = keras.Sequential([
@@ -37,14 +37,14 @@ model = keras.Sequential([
     keras.layers.Dense(10, activation='tanh'),
     keras.layers.Dense(8, activation='tanh'),
     keras.layers.Dense(6, activation='tanh'),
-    keras.layers.Dense(3, activation='softmax'),
+    keras.layers.Dense(2, activation='softmax'),
 ])
 
-model.compile(optimizer=Adam(learning_rate=0.001),  # Zmniejszamy learning rate
+model.compile(optimizer=Adam(learning_rate=0.001),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-history = model.fit(X_train, y_train, epochs=500, batch_size=128, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=500, batch_size=64, validation_split=0.2)
 
 model.save('pong_model.keras')
 
@@ -52,7 +52,7 @@ model.save('pong_model.keras')
 predictions = model.predict(X_test)
 
 plt.figure(figsize=(10, 8))
-for i in range(3):
+for i in range(2):
     plt.subplot(3, 1, i+1)
     plt.plot(y_test, label='True')
     plt.plot(predictions[:, i], label=f'Neuron {i+1}')
