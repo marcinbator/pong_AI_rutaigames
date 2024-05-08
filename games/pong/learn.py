@@ -27,8 +27,8 @@ input_data_normalized = np.array(input_data_normalized).T
 
 
 X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2, random_state=42)
-y_train = (y_train + 1)/2
-y_test = (y_test + 1)/2
+y_train = y_train + 1
+y_test = y_test + 1
 
 
 model = keras.Sequential([
@@ -37,7 +37,7 @@ model = keras.Sequential([
     keras.layers.Dense(10, activation='tanh'),
     keras.layers.Dense(8, activation='tanh'),
     keras.layers.Dense(6, activation='tanh'),
-    keras.layers.Dense(2, activation='softmax'),
+    keras.layers.Dense(3, activation='softmax'),
 ])
 
 model.compile(optimizer=Adam(learning_rate=0.001),
@@ -51,11 +51,15 @@ model.save('pong_model.keras')
 ########
 predictions = model.predict(X_test)
 
+sort_index = np.argsort(y_test)
+y_test_sorted = y_test[sort_index]
+predictions_sorted = predictions[sort_index]
+
 plt.figure(figsize=(10, 8))
-for i in range(2):
+for i in range(3):
     plt.subplot(3, 1, i+1)
-    plt.plot(y_test, label='True')
-    plt.plot(predictions[:, i], label=f'Neuron {i+1}')
+    plt.plot(y_test_sorted, label='True')
+    plt.plot(predictions_sorted[:, i], label=f'Neuron {i+1}')
     plt.title(f'Predictions for Neuron {i+1}')
     plt.xlabel('Index')
     plt.ylabel('Output')
@@ -63,10 +67,10 @@ for i in range(2):
 plt.tight_layout()
 plt.show()
 
-with open('predictions.csv', 'w', newline='') as csvfile:
+with open('predictions_sorted.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['True_Value', 'Predicted_Neuron_1', 'Predicted_Neuron_2', 'Predicted_Neuron_3'])
-    for true_val, pred_vals in zip(y_test, predictions):
+    for true_val, pred_vals in zip(y_test_sorted, predictions_sorted):
         writer.writerow([true_val] + list(pred_vals))
 
 ########
