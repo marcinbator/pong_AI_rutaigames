@@ -3,8 +3,6 @@ import json
 
 import numpy as np
 
-import numpy as np
-
 
 def generate_board(snake_data, apple_data_y, apple_data_x, head_y, head_x):
     board = [0] * 20 * 20

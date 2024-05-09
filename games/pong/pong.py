@@ -1,7 +1,6 @@
 import json
 
 from RUTAIGamesWebsocketHandler import RUTAIGamesWebsocketHandler
-from games.pong.normal.model import predict_result as normal
 from games.pong.algorithm.model import predict_result as algorithm
 
 

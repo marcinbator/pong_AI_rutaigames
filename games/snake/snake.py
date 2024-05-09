@@ -1,11 +1,8 @@
 import json
-import random
-
-import numpy as np
-
-from games.snake.model import predict_result
 
 from RUTAIGamesWebsocketHandler import RUTAIGamesWebsocketHandler
+from games.snake.model import predict_result
+
 
 def generate_board(snake_data, apple_data_y, apple_data_x, head_data_y, head_data_x):
     board = [0] * 20 * 20
@@ -26,13 +23,15 @@ def generate_board(snake_data, apple_data_y, apple_data_x, head_data_y, head_dat
         print()
     return board
 
+
 class SnakeWebSocketHandler(RUTAIGamesWebsocketHandler):
     def send_data(self, receivedData):
         data = []
         # for i in range(4):
         #     data.append(receivedData[1][i]['value'])
 
-        for e in generate_board(receivedData[1][4], receivedData[1][1], receivedData[1][0], receivedData[1][3], receivedData[1][2]):
+        for e in generate_board(receivedData[1][4], receivedData[1][1], receivedData[1][0], receivedData[1][3],
+                                receivedData[1][2]):
             data.append(e)
 
         print(data)

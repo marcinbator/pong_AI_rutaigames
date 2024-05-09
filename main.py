@@ -4,8 +4,8 @@ import tornado.websocket
 
 from games.pong.pong import PongWebSocketHandler
 from games.snake.snake import SnakeWebSocketHandler
-from games.tictactoe import TicTacToeWebSocketHandler
 from games.spacerush import SpaceRushWebSocketHandler
+from games.tictactoe import TicTacToeWebSocketHandler
 
 
 def make_app():

@@ -2,8 +2,7 @@ import keras
 import pandas as pd
 from keras.src.callbacks import EarlyStopping
 from sklearn.preprocessing import LabelEncoder, MinMaxScaler
-from tensorflow.keras.layers import Dropout
-from tensorflow.keras import regularizers
+
 
 # Load and preprocess data
 def load_and_preprocess_data(file_path):
@@ -18,6 +17,7 @@ def load_and_preprocess_data(file_path):
     output_data = label_encoder.fit_transform(output_data)
 
     return input_data, output_data
+
 
 X_train, y_train = load_and_preprocess_data('prepared_snake_snake.csv')
 X_test, y_test = load_and_preprocess_data('prepared_snake_snake_test.csv')
