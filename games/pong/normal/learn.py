@@ -61,7 +61,7 @@ model.compile(optimizer=Adam(learning_rate=0.005),
               metrics=['accuracy'])
 
 # Trenowanie modelu
-history = model.fit(X_train, y_train, epochs=500, batch_size=1000, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=2000, batch_size=1000, validation_split=0.2)
 
 # Zapis modelu
 model.save('output/pong_model_normal.keras')
