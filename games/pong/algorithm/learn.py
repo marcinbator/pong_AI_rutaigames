@@ -12,7 +12,7 @@ name = "output/prepared_pong_pong_algorithm.csv"
 data = pd.read_csv(name, delimiter=',')
 
 # Normalizacja danych
-data_normalization = 'min_max'
+data_normalization = 'zero_one'
 activation = ''
 
 input_data = data.iloc[:, :-1].values
@@ -52,12 +52,11 @@ model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
     keras.layers.Dense(16, activation=activation),
     keras.layers.Dense(8, activation=activation),
-    keras.layers.Dense(6, activation=activation),
     keras.layers.Dense(2, activation='softmax'),
 ])
 
 # Kompilacja modelu
-model.compile(optimizer=Adam(learning_rate=0.01),
+model.compile(optimizer=Adam(learning_rate=0.005),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 

@@ -52,12 +52,11 @@ model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
     keras.layers.Dense(16, activation=activation),
     keras.layers.Dense(8, activation=activation),
-    keras.layers.Dense(6, activation=activation),
     keras.layers.Dense(3, activation='softmax'),
 ])
 
 # Kompilacja modelu
-model.compile(optimizer=Adam(learning_rate=0.01),
+model.compile(optimizer=Adam(learning_rate=0.005),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
