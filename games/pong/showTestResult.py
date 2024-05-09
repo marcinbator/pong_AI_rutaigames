@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 
-data = pd.read_csv('results_normal.csv')
+data = pd.read_csv('results.csv')
 
 architecture_labels = data['architecture'].unique()
 architecture_map = {label: i for i, label in enumerate(architecture_labels)}

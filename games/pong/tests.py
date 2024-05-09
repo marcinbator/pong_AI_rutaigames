@@ -22,8 +22,8 @@ def train_model(layer_config, learning_rate, data_normalization):
 
     X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2,
                                                         random_state=42)
-    y_train = (y_train + 1)/2
-    y_test = (y_test + 1)/2
+    y_train = y_train + 1
+    y_test = y_test + 1
 
     model = keras.Sequential()
     model.add(keras.layers.Flatten(input_shape=(5,)))
@@ -37,7 +37,7 @@ def train_model(layer_config, learning_rate, data_normalization):
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
-    history = model.fit(X_train, y_train, epochs=1000, batch_size=32, validation_split=0.2, verbose=0)
+    history = model.fit(X_train, y_train, epochs=1000, batch_size=500, validation_split=0.2)
 
     test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
 
@@ -48,26 +48,24 @@ def train_model(layer_config, learning_rate, data_normalization):
     return test_acc, test_loss, classification_accuracy
 
 
-layer_configs = [(8, 8, 2), (12, 8, 2), (16, 8, 2), (10, 8, 6, 2), (12, 8, 6, 2), (16, 8, 6, 2)]
+layer_configs = [(8, 8, 3), (12, 8, 3), (16, 8, 3), (10, 8, 6, 3), (12, 8, 6, 3), (16, 8, 6, 3)]
 learning_rates = [1e-2, 5e-3, 2e-3, 1e-3, 5e-4, 2e-4, 1e-4]
 normalization_methods = ['min_max', 'zero_one']
-
-results = []
 
 total_combinations = len(layer_configs) * len(learning_rates) * len(normalization_methods)
 progress_bar = tqdm(total=total_combinations, desc='Training Models')
 
+with open("results.csv", "w") as file:
+    file.write("architecture,lr,normalization,accuracy,loss,classification_accuracy\n")
 for layer_config in layer_configs:
     for learning_rate in learning_rates:
         for normalization_method in normalization_methods:
             acc, loss, classification_accuracy = train_model(layer_config, learning_rate, normalization_method)
-            results.append(
-                f'"{";".join(str(x) for x in layer_config)}", {learning_rate}, {normalization_method},{acc}, {loss}, {classification_accuracy}')
             progress_bar.update(1)
+            with open("results.csv", "a") as file:
+                file.write(f'"{";".join(str(x) for x in layer_config)}", {learning_rate}, {normalization_method},{acc}, {loss}, {classification_accuracy}\n')
 
 progress_bar.close()
 
-with open("results_ai.csv", "w") as file:
-    file.write("architecture,lr,normalization,accuracy,loss,classification_accuracy\n")
-    for a in range(len(results)):
-        file.write(f'{results[a]}\n')
+
+
