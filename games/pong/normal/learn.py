@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow import keras
 
 # Wczytanie danych
-name = "output/prepared_pong_pong_normal.csv"
+name = "output/new_prepared_pong_pong_normal.csv"
 data = pd.read_csv(name, delimiter=',')
 
 # Normalizacja danych
