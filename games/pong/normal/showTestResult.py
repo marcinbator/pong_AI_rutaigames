@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
-data = pd.read_csv('output/results_normal.csv')
+data = pd.read_csv('output/results_normal_series3.csv')
 
 architecture_labels = data['architecture'].unique()
 architecture_map = {label: i for i, label in enumerate(architecture_labels)}

@@ -50,18 +50,20 @@ y_test = (y_test + 1) / 2
 # Definicja modelu
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
+    keras.layers.Dense(32, activation=activation),
+    keras.layers.Dense(24, activation=activation),
+    keras.layers.Dense(24, activation=activation),
     keras.layers.Dense(16, activation=activation),
-    keras.layers.Dense(8, activation=activation),
     keras.layers.Dense(2, activation='softmax'),
 ])
 
 # Kompilacja modelu
-model.compile(optimizer=Adam(learning_rate=0.005),
+model.compile(optimizer=Adam(learning_rate=0.0001),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
 # Trenowanie modelu
-history = model.fit(X_train, y_train, epochs=2000, batch_size=1000, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=6000, batch_size=1000, validation_split=0.2)
 
 # Zapis modelu
 model.save('output/pong_model_algorithm.keras')

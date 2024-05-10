@@ -52,7 +52,7 @@ def train_model(layer_config, learning_rate, data_normalization):
                   loss='sparse_categorical_crossentropy',
                   metrics=['accuracy'])
 
-    history = model.fit(X_train, y_train, epochs=1000, batch_size=500, validation_split=0.2)
+    history = model.fit(X_train, y_train, epochs=6000, batch_size=500, validation_split=0.2)
 
     test_loss, test_acc = model.evaluate(X_test, y_test, verbose=0)
 
@@ -63,21 +63,28 @@ def train_model(layer_config, learning_rate, data_normalization):
     return test_acc, test_loss, classification_accuracy
 
 
-layer_configs = [(8, 8), (12, 8), (16, 8), (10, 8, 6), (12, 8, 6), (16, 8, 6)]
-learning_rates = [1e-2, 5e-3, 2e-3, 1e-3, 5e-4, 2e-4, 1e-4]
+# layer_configs = [(8, 8), (12, 8), (16, 8), (10, 8, 6), (12, 8, 6), (16, 8, 6)]
+# learning_rates = [1e-2, 5e-3, 2e-3, 1e-3, 5e-4, 2e-4, 1e-4]
+
+# layer_configs = [(32, 24, 16), (32, 24, 12), (32, 20, 12), (24, 16, 12), (20, 16, 12), (20, 20, 12), (16, 16, 16), (16, 16, 12), (16, 16, 8)]
+# learning_rates = [1e-3, 5e-4, 2e-4, 1e-4]
+
+layer_configs = [(32, 32, 24, 16), (32, 24, 24, 16), (32, 24, 16, 12)]
+learning_rates = [2e-4, 1e-4]
 normalization_methods = ['min_max', 'zero_one']
 
 total_combinations = len(layer_configs) * len(learning_rates) * len(normalization_methods)
 progress_bar = tqdm(total=total_combinations, desc='Training Models')
 
-with open("output/results_algorithm.csv", "w") as file:
+name = "output/results_algorithm_series3.csv"
+with open(name, "w") as file:
     file.write("architecture,lr,normalization,accuracy,loss,classification_accuracy\n")
 for layer_config in layer_configs:
     for learning_rate in learning_rates:
         for normalization_method in normalization_methods:
             acc, loss, classification_accuracy = train_model(layer_config, learning_rate, normalization_method)
             progress_bar.update(1)
-            with open("output/results_algorithm.csv", "a") as file:
+            with open(name, "a") as file:
                 file.write(
                     f'"{";".join(str(x) for x in layer_config)}", {learning_rate}, {normalization_method},{acc}, {loss}, {classification_accuracy}\n')
 
