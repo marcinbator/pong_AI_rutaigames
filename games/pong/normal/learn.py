@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split
 from tensorflow import keras
 
 # Wczytanie danych
-name = "output/new_prepared_pong_pong_normal.csv"
+name = "output/new_data_20_25.csv"
 data = pd.read_csv(name, delimiter=',')
 
 # Normalizacja danych
@@ -63,7 +63,7 @@ model.compile(optimizer=Adam(learning_rate=0.0001),
               metrics=['accuracy'])
 
 # Trenowanie modelu
-history = model.fit(X_train, y_train, epochs=6000, batch_size=1000, validation_split=0.2)
+history = model.fit(X_train, y_train, epochs=8000, batch_size=1000, validation_split=0.2)
 
 # Zapis modelu
 model.save('output/pong_model_normal.keras')

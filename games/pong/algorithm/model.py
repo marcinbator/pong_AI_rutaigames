@@ -2,7 +2,7 @@ import numpy as np
 from keras.src.saving.saving_lib import load_model
 
 saved_model = load_model('games/pong/algorithm/output/pong_model_algorithm.keras')
-
+normalization = 'zero_one'
 
 def predict_result(input_values):
     input_values = np.array(input_values)
@@ -12,7 +12,10 @@ def predict_result(input_values):
         for v in input_values:
             v = round(v, 0)
             min_val, max_val = map(float, file.readline().split(","))
-            v = (2 * (v - min_val) / (max_val - min_val)) - 1
+            if normalization == 'zero_one':
+                v = (v - min_val) / (max_val - min_val)
+            else:
+                v = (2 * (v - min_val) / (max_val - min_val)) - 1
             normalized_values.append(v)
 
     print("normalized:", normalized_values)
