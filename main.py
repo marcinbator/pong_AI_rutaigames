@@ -7,6 +7,7 @@ from games.snake.snake import SnakeWebSocketHandler
 from games.spacerush import SpaceRushWebSocketHandler
 from games.tictactoe import TicTacToeWebSocketHandler
 from games.flappybird import FlappyBirdWebSocketHandler
+from games.arkanoid import ArkanoidWebSocketHandler
 
 
 def make_app():
@@ -16,6 +17,7 @@ def make_app():
         (r"/ws/tictactoe/", TicTacToeWebSocketHandler),
         (r"/ws/spacerush/", SpaceRushWebSocketHandler),
         (r"/ws/flappybird/", FlappyBirdWebSocketHandler),
+        (r"/ws/arkanoid/", ArkanoidWebSocketHandler),
     ])
 
 
