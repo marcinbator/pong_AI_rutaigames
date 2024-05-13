@@ -49,12 +49,13 @@ y_test = y_test + 1
 
 # Definicja modelu
 model = keras.Sequential([
-    keras.layers.Flatten(input_shape=(5,)),
-    keras.layers.Dense(32, activation=activation),
-    keras.layers.Dense(32, activation=activation),
-    keras.layers.Dense(24, activation=activation),
-    keras.layers.Dense(16, activation=activation),
-    keras.layers.Dense(3, activation='softmax'),
+        keras.layers.Conv1D(filters=64, kernel_size=2, activation='tanh', input_shape=(5, 1)),
+        keras.layers.MaxPooling1D(pool_size=2),
+        keras.layers.Conv1D(filters=32, kernel_size=2, activation='tanh'),
+        keras.layers.Flatten(),
+        keras.layers.Dense(20, activation='tanh'),
+        keras.layers.Dense(10, activation='tanh'),
+        keras.layers.Dense(3, activation='softmax'),
 ])
 
 # Kompilacja modelu
