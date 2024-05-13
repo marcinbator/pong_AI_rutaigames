@@ -1,9 +1,9 @@
 import json
 
 from RUTAIGamesWebsocketHandler import RUTAIGamesWebsocketHandler
-from games.pong.algorithm.model import predict_result as algorithm
-from games.pong.normal.model import predict_result as normal
-
+# from games.pong.algorithm.model import predict_result as algorithm
+# from games.pong.normal.model import predict_result as normal
+from games.pong.normal_cnn.model import predict_result as normal
 
 class PongWebSocketHandler(RUTAIGamesWebsocketHandler):
     def send_data(self, receivedData):
