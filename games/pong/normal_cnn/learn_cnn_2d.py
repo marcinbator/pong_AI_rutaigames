@@ -52,7 +52,7 @@ model = Sequential([
     MaxPooling2D(2, 2),
     Flatten(),
     Dense(1024, activation='relu'),
-    Dense(3, activation='softmax')
+    Dense(1, activation='sigmoid')
 ])
 
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
