@@ -1,7 +1,7 @@
 import numpy as np
 from keras.src.saving.saving_lib import load_model
 
-saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn.keras')
+saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
 normalization = 'min_max'
 
 def predict_result(input_values):
