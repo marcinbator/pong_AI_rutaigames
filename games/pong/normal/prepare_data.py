@@ -34,20 +34,14 @@ data = np.column_stack((balls_x, balls_y, balls_vel_x, balls_vel_y, data))
 
 df = pd.DataFrame(data)
 
-# Zamiana typów danych na numeryczne dla wszystkich kolumn
 df = df.apply(pd.to_numeric, errors='ignore')
 
-
-# Definiowanie funkcji do grupowania
 def custom_round(x):
     return round(x / 3) * 3
 
-
-# Zaokrąglanie każdej z pierwszych pięciu kolumn
 for i in range(5):
     df[i] = df[i].apply(custom_round)
 
-# Grupowanie i obliczanie średniej dla pierwszych pięciu kolumn oraz modę dla szóstej kolumny
 df_grouped = df.groupby(list(df.columns[:5])).agg(
     {0: 'mean', 1: 'mean', 2: 'mean', 3: 'mean', 4: 'mean', 5: lambda x: pd.Series.mode(x)[0]})
 
