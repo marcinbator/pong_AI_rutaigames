@@ -59,7 +59,7 @@ model = Sequential([
     Conv2D(128, (3, 3), activation='relu'),
     MaxPooling2D(2, 2),
     Flatten(),
-    Dense(1024, activation='relu'),
+    Dense(64, activation='relu'),
     Dense(3, activation='softmax')
 ])
 

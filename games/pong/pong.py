@@ -15,6 +15,6 @@ class PongWebSocketHandler(RUTAIGamesWebsocketHandler):
             receivedData[1][2]['value'],
         ]
         print(data)
-        move = normal(data)
+        move = normal((447, 340, 1453, 972))
         print("move: ", move)
         self.write_message(json.dumps({'up': int(move)}))

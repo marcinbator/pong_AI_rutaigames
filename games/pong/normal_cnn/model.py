@@ -1,28 +1,40 @@
 import numpy as np
-from keras.src.saving.saving_lib import load_model
+from tensorflow import keras
+load_model = keras.models.load_model
+image = keras.preprocessing.image
+from PIL import ImageGrab
 
 saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
-normalization = 'min_max'
 
-def predict_result(input_values):
-    input_values = np.array(input_values)
-    normalized_values = []
+def predict_result(bbox):
+    # Przechwytuje obraz z ekranu o podanych koordynatach
+    img = ImageGrab.grab(bbox)
 
-    with open("games/pong/normal/output/min_max_values_normal.txt", "r") as file:
-        for v in input_values:
-            v = round(v, 0)
-            min_val, max_val = map(float, file.readline().split(","))
-            if normalization == 'zero_one':
-                v = (v - min_val) / (max_val - min_val)
-            else:
-                v = (2 * (v - min_val) / (max_val - min_val)) - 1
-            normalized_values.append(v)
+    # Przekształć obraz w odpowiedni rozmiar
+    img = img.resize((256, 144))
 
-    print("normalized:", normalized_values)
-    prediction = saved_model.predict(np.array([normalized_values]))
-    print("prediction: ", prediction)
-    predicted_value = np.argmax(prediction, axis=1)
+    # Wyświetl przechwycony obraz
+    # img.show()
 
-    return -(predicted_value[0] - 1)
+    # Przekształć obraz w tablicę numpy
+    img_array = image.img_to_array(img)
 
-# predict_result([199.6,69.0,7.3,9.5,72])
+    # Dodaj dodatkowy wymiar, aby stworzyć pojedynczy batch
+    img_batch = np.expand_dims(img_array, axis=0)
+
+    # Normalizuj obraz (jeśli to było robione podczas treningu)
+    img_preprocessed = img_batch / 255.0
+
+    # Użyj modelu do przewidzenia klasy obrazu
+    predictions = saved_model.predict(img_preprocessed)
+
+    # Wybierz klasę z największym prawdopodobieństwem
+    predicted_class = np.argmax(predictions[0])
+
+    predicted_class = (predicted_class - 1)
+
+    print(predicted_class)
+
+    return predicted_class
+
+# predict_result((447, 340, 1453, 972))
