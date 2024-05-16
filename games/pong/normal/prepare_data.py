@@ -34,15 +34,4 @@ data = np.column_stack((balls_x, balls_y, balls_vel_x, balls_vel_y, data))
 
 df = pd.DataFrame(data)
 
-df = df.apply(pd.to_numeric, errors='ignore')
-
-def custom_round(x):
-    return round(x / 3) * 3
-
-for i in range(5):
-    df[i] = df[i].apply(custom_round)
-
-df_grouped = df.groupby(list(df.columns[:5])).agg(
-    {0: 'mean', 1: 'mean', 2: 'mean', 3: 'mean', 4: 'mean', 5: lambda x: pd.Series.mode(x)[0]})
-
-df_grouped.to_csv('output/prepared_pong_pong_normal.csv', index=False, header=False)
+df.to_csv('output/prepared_pong_pong_normal.csv', index=False, header=False)

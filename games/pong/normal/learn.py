@@ -7,11 +7,9 @@ from keras.src.optimizers import Adam
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
 
-# Wczytanie danych
 name = "output/new_data_20_25.csv"
 data = pd.read_csv(name, delimiter=',')
 
-# Normalizacja danych
 data_normalization = 'min_max'
 activation = ''
 
@@ -42,12 +40,10 @@ elif data_normalization == 'zero_one':
 
 input_data_normalized = np.array(input_data_normalized).T
 
-# Podział danych na zestawy treningowe i testowe
 X_train, X_test, y_train, y_test = train_test_split(input_data_normalized, output_data, test_size=0.2, random_state=42)
-y_train = y_train + 1
-y_test = y_test + 1
+y_train = y_train + 1  # {-1,0,1} -> {0,1,2}
+y_test = y_test + 1  # {-1,0,1} -> {0,1,2}
 
-# Definicja modelu
 model = keras.Sequential([
     keras.layers.Flatten(input_shape=(5,)),
     keras.layers.Dense(32, activation=activation),
@@ -57,15 +53,12 @@ model = keras.Sequential([
     keras.layers.Dense(3, activation='softmax'),
 ])
 
-# Kompilacja modelu
 model.compile(optimizer=Adam(learning_rate=0.0001),
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-# Trenowanie modelu
 history = model.fit(X_train, y_train, epochs=8000, batch_size=1000, validation_split=0.2)
 
-# Zapis modelu
 model.save('output/pong_model_normal.keras')
 
 # Predykcje
