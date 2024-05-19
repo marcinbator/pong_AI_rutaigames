@@ -1,4 +1,5 @@
 import json
+import random
 
 from RUTAIGamesWebsocketHandler import RUTAIGamesWebsocketHandler
 from games.snake.model import predict_result
@@ -36,6 +37,6 @@ class SnakeWebSocketHandler(RUTAIGamesWebsocketHandler):
 
         print(data)
         keys = ['up', 'down', 'left', 'right']
-        keyIndex = predict_result(data) - 1
-        print("selected: ", keys[keyIndex])
-        self.write_message(json.dumps({'key': keys[keyIndex]}))
+        keyIndex = random.choice(keys)
+        print("selected: ", keyIndex)
+        self.write_message(json.dumps({'key': keyIndex}))
