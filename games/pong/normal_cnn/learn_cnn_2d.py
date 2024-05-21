@@ -2,7 +2,9 @@ import os
 import numpy as np
 import pandas as pd
 from PIL import Image
-from keras import Sequential
+from keras import Sequential, Input
+from keras.src.layers import AveragePooling2D
+from keras.src.optimizers import Adam
 from keras.src.utils import to_categorical
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
@@ -24,7 +26,7 @@ labels = data.iloc[:, 5].values
 for image_file in image_files:
     image_path = os.path.join(images_dir, image_file)
     try:
-        image = Image.open(image_path).convert('LA')
+        image = Image.open(image_path).convert('L')
         # print(f"Wczytano obraz: {image_file}")
         image = np.array(image)
         images.append(image)
@@ -49,21 +51,24 @@ y_test = to_categorical(y_test, num_classes=3)
 
 # budowa modelu CNN
 model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(144, 256, 2)),
-    MaxPooling2D(2, 2),
-    Conv2D(64, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D(2, 2),
+    Input(shape=(144, 256, 1)),
+    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
+    AveragePooling2D(2, 2),
+    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
+    AveragePooling2D(2, 2),
+    # Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    # Conv2D(32, (5, 5), (3, 2), 'same', activation='relu'),
     Flatten(),
-    Dense(64, activation='relu'),
+    # Dense(256, activation='relu'),
+    Dense(128, activation='relu'),
     Dense(3, activation='softmax')
 ])
 
-model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
-model.fit(X_train, y_train, epochs=20, batch_size=64, validation_data=(X_test, y_test))
+model.compile(optimizer=Adam(learning_rate=0.1), loss='binary_crossentropy', metrics=['accuracy'])
+
+model.fit(X_train, y_train, epochs=32, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')

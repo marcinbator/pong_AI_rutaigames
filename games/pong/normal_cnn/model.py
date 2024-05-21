@@ -11,7 +11,7 @@ def predict_result(bbox):
     img = ImageGrab.grab(bbox)
 
     # Przekształć obraz w odpowiedni rozmiar
-    img = img.resize((256, 144)).convert('LA')
+    img = img.resize((256, 144)).convert('L')
 
     # Wyświetl przechwycony obraz
     # img.show()
