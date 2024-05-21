@@ -55,20 +55,20 @@ model = Sequential([
     Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
     AveragePooling2D(2, 2),
-    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
-    Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
-    AveragePooling2D(2, 2),
+    # Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    # Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
+    # AveragePooling2D(2, 2),
     # Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
     # Conv2D(32, (5, 5), (3, 2), 'same', activation='relu'),
     Flatten(),
     # Dense(256, activation='relu'),
-    Dense(128, activation='relu'),
+    # Dense(128, activation='relu'),
     Dense(3, activation='softmax')
 ])
 
 
-model.compile(optimizer=Adam(learning_rate=0.1), loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
 
-model.fit(X_train, y_train, epochs=32, batch_size=32, validation_data=(X_test, y_test))
+model.fit(X_train, y_train, epochs=5, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')
