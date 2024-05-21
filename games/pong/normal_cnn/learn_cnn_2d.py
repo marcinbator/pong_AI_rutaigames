@@ -57,14 +57,14 @@ model = Sequential([
     Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
     AveragePooling2D(2, 2),
-    # Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
-    # Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
-    # AveragePooling2D(2, 2),
-    # Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
-    # Conv2D(32, (5, 5), (3, 2), 'same', activation='relu'),
+    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
+    AveragePooling2D(2, 2),
+    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    Conv2D(32, (5, 5), (3, 2), 'same', activation='relu'),
     Flatten(),
-    # Dense(256, activation='relu'),
-    # Dense(128, activation='relu'),
+    Dense(256, activation='relu'),
+    Dense(128, activation='relu'),
     Dense(3, activation='softmax')
 ])
 
