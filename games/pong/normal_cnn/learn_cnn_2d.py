@@ -24,9 +24,8 @@ labels = data.iloc[:, 5].values
 for image_file in image_files:
     image_path = os.path.join(images_dir, image_file)
     try:
-        image = Image.open(image_path).convert('RGB')
+        image = Image.open(image_path).convert('LA')
         # print(f"Wczytano obraz: {image_file}")
-        # image = image.resize((96, 64))
         image = np.array(image)
         images.append(image)
 
@@ -50,7 +49,7 @@ y_test = to_categorical(y_test, num_classes=3)
 
 # budowa modelu CNN
 model = Sequential([
-    Conv2D(32, (3, 3), activation='relu', input_shape=(144, 256, 3)),
+    Conv2D(32, (3, 3), activation='relu', input_shape=(144, 256, 2)),
     MaxPooling2D(2, 2),
     Conv2D(64, (3, 3), activation='relu'),
     MaxPooling2D(2, 2),

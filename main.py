@@ -2,6 +2,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
+from games.pong.normal_cnn.choose_screen import choose_positions
 from games.pong.pong import PongWebSocketHandler
 from games.snake.snake import SnakeWebSocketHandler
 from games.spacerush import SpaceRushWebSocketHandler
@@ -22,6 +23,7 @@ def make_app():
 
 
 def run():
+    choose_positions()
     app = make_app()
     app.listen(8001)
     print("Started")
