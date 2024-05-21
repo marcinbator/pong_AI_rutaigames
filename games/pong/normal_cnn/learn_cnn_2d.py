@@ -1,4 +1,5 @@
 import os
+import csv
 import numpy as np
 import pandas as pd
 from PIL import Image
@@ -6,6 +7,7 @@ from keras import Sequential, Input
 from keras.src.layers import AveragePooling2D
 from keras.src.optimizers import Adam
 from keras.src.utils import to_categorical
+from matplotlib import pyplot as plt
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 
@@ -69,6 +71,65 @@ model = Sequential([
 
 model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
 
-model.fit(X_train, y_train, epochs=5, batch_size=32, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=20, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')
+
+# Predykcje
+predictions = model.predict(X_test)
+
+# Sortowanie według rzeczywistych wartości etykiet
+sort_index = np.argsort(np.argmax(y_test, axis=1))
+y_test_sorted = y_test[sort_index]
+predictions_sorted = predictions[sort_index]
+
+# Wykresy
+plt.figure(figsize=(10, 8))
+for i in range(3):
+    plt.subplot(3, 1, i + 1)
+    plt.plot(y_test_sorted, label='True')
+    plt.plot(predictions_sorted[:, i], label=f'Neuron {i + 1}')
+    plt.title(f'Predictions for Neuron {i + 1}')
+    plt.xlabel('Index')
+    plt.ylabel('Output')
+    plt.legend()
+plt.tight_layout()
+plt.show()
+
+# Zapis predykcji do pliku CSV
+with open('output/predictions_normal_cnn.csv', 'w', newline='') as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(['True_Value', 'Predicted_Neuron_1', 'Predicted_Neuron_2', 'Predicted_Neuron_3'])
+    for true_val, pred_vals in zip(y_test_sorted, predictions_sorted):
+        writer.writerow([true_val] + list(pred_vals))
+
+# Ocena modelu
+test_loss, test_acc = model.evaluate(X_test, y_test)
+
+predictions = np.argmax(model.predict(X_test), axis=1)
+correct_predictions = np.sum(predictions == np.argmax(y_test, axis=1))
+classification_accuracy = correct_predictions / len(y_test)
+
+print('\nClassification accuracy:', classification_accuracy)
+
+# Wykresy dokładności i straty modelu
+fig, axs = plt.subplots(2)
+fig.suptitle('Model Accuracy and Loss')
+axs[0].plot(history.history['accuracy'])
+axs[0].plot(history.history['val_accuracy'])
+axs[0].set_ylabel('Accuracy')
+axs[0].legend(['Train', 'Validation'], loc='upper left')
+
+axs[1].plot(history.history['loss'])
+axs[1].plot(history.history['val_loss'])
+axs[1].set_xlabel('Epoch')
+axs[1].set_ylabel('Loss')
+axs[1].legend(['Train', 'Validation'], loc='upper left')
+
+plt.show()
+
+# Obliczanie dokładności klasyfikacji dla danych trenujących
+train_predictions = np.argmax(model.predict(X_train), axis=1)
+train_accuracy = np.mean(train_predictions == np.argmax(y_train, axis=1))
+
+print('Train accuracy:', train_accuracy)
