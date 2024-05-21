@@ -6,7 +6,6 @@ from PIL import ImageGrab
 
 saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
 
-
 def predict_result(bbox):
     # Przechwytuje obraz z ekranu o podanych koordynatach
     img = ImageGrab.grab(bbox)

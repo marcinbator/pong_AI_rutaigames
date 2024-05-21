@@ -2,8 +2,7 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 
-from games.pong.normal_cnn.choose_screen import choose_positions
-from games.pong.pong import PongWebSocketHandler
+from games.pong.pong import PongWebSocketHandler, choose_positions
 from games.snake.snake import SnakeWebSocketHandler
 from games.spacerush import SpaceRushWebSocketHandler
 from games.tictactoe import TicTacToeWebSocketHandler
