@@ -54,22 +54,18 @@ y_test = to_categorical(y_test, num_classes=3)
 # budowa modelu CNN
 model = Sequential([
     Input(shape=(144, 256, 1)),
-    # Conv2D(128, (3, 3), (2, 2), 'same', activation='relu'),
-    # Conv2D(128, (3, 3), (2, 2), 'same', activation='relu'),
-    # Dropout(0.3),
-    # AveragePooling2D(2, 2),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
     Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
-    Dropout(0.5),
+    Dropout(0.4),
     AveragePooling2D(2, 2),
     Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
     Conv2D(16, (5, 5), (2, 2), 'same', activation='relu'),
-    Dropout(0.5),
+    Dropout(0.4),
     Flatten(),
     Dense(128, activation='relu'),
-    Dropout(0.5),
+    Dropout(0.4),
     Dense(64, activation='relu'),
-    Dropout(0.5),
+    Dropout(0.4),
     Dense(3, activation='softmax')
 ])
 
