@@ -1,5 +1,3 @@
-import time
-
 import numpy as np
 from keras.src.utils import img_to_array
 from tensorflow import keras
@@ -25,9 +23,6 @@ def predict_result(bbox):
         img_array = img_to_array(img)
 
         image_stack.append(img_array)
-
-        # Krótki czas oczekiwania między przechwytywaniem kolejnych obrazów
-        time.sleep(0.05)
 
     # Stackowanie obrazów wzdłuż nowego wymiaru
     image_stack = np.stack(image_stack, axis=-1)

@@ -60,16 +60,16 @@ model = Sequential([
     Input(shape=(144, 256, num_last_images)),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
     Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
-    Dropout(0.4),
+    Dropout(0.5),
     AveragePooling2D(2, 2),
     Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
     Conv2D(16, (5, 5), (2, 2), 'same', activation='relu'),
-    Dropout(0.4),
+    Dropout(0.5),
     Flatten(),
     Dense(128, activation='relu'),
-    Dropout(0.4),
+    Dropout(0.5),
     Dense(64, activation='relu'),
-    Dropout(0.4),
+    Dropout(0.5),
     Dense(3, activation='softmax')
 ])
 
