@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 from keras import Sequential, Input
-from keras.src.layers import AveragePooling2D
+from keras.src.layers import AveragePooling2D, Dropout
 from keras.src.optimizers import Adam
 from keras.src.utils import to_categorical
 from matplotlib import pyplot as plt
@@ -54,24 +54,29 @@ y_test = to_categorical(y_test, num_classes=3)
 # budowa modelu CNN
 model = Sequential([
     Input(shape=(144, 256, 1)),
-    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
+    # Conv2D(128, (3, 3), (2, 2), 'same', activation='relu'),
+    # Conv2D(128, (3, 3), (2, 2), 'same', activation='relu'),
+    # Dropout(0.3),
+    # AveragePooling2D(2, 2),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
+    Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
+    Dropout(0.5),
     AveragePooling2D(2, 2),
-    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
-    Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
-    AveragePooling2D(2, 2),
-    Conv2D(64, (5, 5), (1, 1), 'same', activation='relu'),
-    Conv2D(32, (5, 5), (3, 2), 'same', activation='relu'),
+    Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
+    Conv2D(16, (5, 5), (2, 2), 'same', activation='relu'),
+    Dropout(0.5),
     Flatten(),
-    Dense(256, activation='relu'),
     Dense(128, activation='relu'),
+    Dropout(0.5),
+    Dense(64, activation='relu'),
+    Dropout(0.5),
     Dense(3, activation='softmax')
 ])
 
 
-model.compile(optimizer=Adam(learning_rate=0.001), loss='binary_crossentropy', metrics=['accuracy'])
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
 
-history = model.fit(X_train, y_train, epochs=20, batch_size=32, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=160, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')
 
