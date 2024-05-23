@@ -15,7 +15,7 @@ from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
 images_dir = 'images/'
 
 # lista plikow obrazow
-image_files = os.listdir(images_dir)
+image_files = sorted(os.listdir(images_dir))
 
 name = "output/prepared_pong_pong_normal.csv"
 data = pd.read_csv(name, delimiter=',')
@@ -24,20 +24,24 @@ data = pd.read_csv(name, delimiter=',')
 images = []
 labels = data.iloc[:, 5].values
 
-# wczytanie obrazow i etykiet
-for image_file in image_files:
-    image_path = os.path.join(images_dir, image_file)
-    try:
-        image = Image.open(image_path).convert('L')
-        # print(f"Wczytano obraz: {image_file}")
-        image = np.array(image)
-        images.append(image)
+# liczba ostatnich obrazów do użycia
+num_last_images = 5
 
-    except Exception as e:
-        print(f"Błąd wczytywania obrazu {image_file}: {e}")
+# wczytanie obrazow i etykiet
+for i in range(len(image_files) - num_last_images + 1):
+    image_stack = []
+    for j in range(num_last_images):
+        image_path = os.path.join(images_dir, image_files[i + j])
+        try:
+            image = Image.open(image_path).convert('L')
+            image = np.array(image)
+            image_stack.append(image)
+        except Exception as e:
+            print(f"Błąd wczytywania obrazu {image_files[i + j]}: {e}")
+    images.append(np.stack(image_stack, axis=-1))
 
 images = np.array(images)
-labels = np.array(labels)
+labels = labels[num_last_images - 1:]
 
 # podział danych na zestawy treningowy i testowy
 X_train, X_test, y_train, y_test = train_test_split(images, labels, test_size=0.2, random_state=42)
@@ -53,7 +57,7 @@ y_test = to_categorical(y_test, num_classes=3)
 
 # budowa modelu CNN
 model = Sequential([
-    Input(shape=(144, 256, 1)),
+    Input(shape=(144, 256, num_last_images)),
     Conv2D(64, (5, 5), (2, 2), 'same', activation='relu'),
     Conv2D(32, (5, 5), (2, 2), 'same', activation='relu'),
     Dropout(0.4),
@@ -69,12 +73,12 @@ model = Sequential([
     Dense(3, activation='softmax')
 ])
 
-
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
 
 history = model.fit(X_train, y_train, epochs=160, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')
+
 
 # Predykcje
 predictions = model.predict(X_test)

@@ -78,4 +78,10 @@ class PongWebSocketHandler(RUTAIGamesWebsocketHandler):
         move = normal((x1, y1, x2, y2))
         # move = normal((444, 208, 1453, 839))
         print("move: ", move)
-        self.write_message(json.dumps({'up': int(move)}))
+        # self.write_message(json.dumps({'up': int(move)}))
+        if move is not None:
+            # Jeśli move jest prawidłową wartością, wyślij ją dalej
+            self.write_message(json.dumps({'up': int(move)}))
+        else:
+            # Jeśli move jest None, nie wysyłaj wiadomości
+            print("No valid move to send.")
