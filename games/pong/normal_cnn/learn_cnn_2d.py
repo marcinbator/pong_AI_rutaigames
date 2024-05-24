@@ -75,7 +75,7 @@ model = Sequential([
 
 model.compile(optimizer=Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
 
-history = model.fit(X_train, y_train, epochs=160, batch_size=32, validation_data=(X_test, y_test))
+history = model.fit(X_train, y_train, epochs=250, batch_size=32, validation_data=(X_test, y_test))
 
 model.save('output/pong_model_normal_cnn_2d.keras')
 
