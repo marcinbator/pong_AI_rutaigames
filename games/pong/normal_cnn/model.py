@@ -9,10 +9,10 @@ from PIL import ImageGrab
 saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
 
 def predict_result(bbox):
-    num_last_images = 5  # liczba ostatnich obrazów do użycia
+    num_last_images = 7  # liczba ostatnich obrazów do użycia
     image_stack = []
 
-    # Przechwytuje ostatnie 5 obrazów z ekranu o podanych koordynatach
+    # Przechwytuje ostatnie X obrazów z ekranu o podanych koordynatach
     for _ in range(num_last_images):
         img = ImageGrab.grab(bbox)
 

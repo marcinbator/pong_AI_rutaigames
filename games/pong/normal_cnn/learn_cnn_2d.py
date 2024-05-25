@@ -25,7 +25,7 @@ images = []
 labels = data.iloc[:, 5].values
 
 # liczba ostatnich obrazów do użycia
-num_last_images = 5
+num_last_images = 7
 
 # wczytanie obrazow i etykiet
 for i in range(len(image_files) - num_last_images + 1):
