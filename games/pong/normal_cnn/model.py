@@ -6,10 +6,12 @@ image = keras.preprocessing.image
 from PIL import ImageGrab
 
 # Wczytanie zapisanego modelu
-saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
+# saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d.keras')
+saved_model = load_model('games/pong/normal_cnn/output/pong_model_normal_cnn_2d_5images.keras')
 
 def predict_result(bbox):
-    num_last_images = 7  # liczba ostatnich obrazów do użycia
+    # num_last_images = 7  # liczba ostatnich obrazów do użycia
+    num_last_images = 5  # liczba ostatnich obrazów do użycia
     image_stack = []
 
     # Przechwytuje ostatnie X obrazów z ekranu o podanych koordynatach
